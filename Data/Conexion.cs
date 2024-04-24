@@ -1,0 +1,35 @@
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
+
+namespace Data
+{
+    public class Conexion
+    {
+        private readonly string _cadena = $"Server=.;DataBase=APIColombia;User=henao88;Password=asd123;TrustServerCertificate=True";
+
+        public DataSet ObtenerUsuariosSinSincronizar()
+        {
+            DataSet ds = new DataSet();
+            using SqlConnection conn = new SqlConnection(_cadena); //cerrar conexión al finalizar el proceso: Using permiten que todo el código dentro de un bloque using se cierre en cuanto sale del bloque
+
+            var query = "ConsultarUsuariosNoSincronizados";
+
+            SqlCommand cmd = new SqlCommand(query, conn);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                conn.Open();
+                var adaptador = new SqlDataAdapter(cmd);
+                adaptador.Fill(ds);
+                return ds;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Se ha producido un error al conectar o ejecutar la consulta, {ex.Message}");
+            }
+        }
+    }
+}
