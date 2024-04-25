@@ -14,7 +14,7 @@ namespace Data
             if (string.IsNullOrEmpty(rutaArchivo)) { throw new Exception("La ruta no puede ser vacia"); }
             try
             {
-                var cadena = $"{row["id"]}, {row["nombre"]},{row["apellido"]},{row["email"]},{row["genero"]},{row["row"]},{row["activo"]}";
+                var cadena = $"{row["id"]}, {row["nombre"]},{row["apellido"]},{row["email"]},{row["genero"]},{row["usuario"]},{row["activo"]}";
                 var directorio = Path.GetDirectoryName(rutaArchivo);
                 if (!Directory.Exists(directorio))
                 {
@@ -23,7 +23,7 @@ namespace Data
 
                 using StreamWriter writer = new StreamWriter(rutaArchivo, true);
                 writer.WriteLine(cadena);
-                writer.Close();
+                writer.Close();// Esta linea podria omitirse
                 return true;
 
             }

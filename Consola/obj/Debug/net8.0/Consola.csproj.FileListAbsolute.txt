@@ -55,3 +55,4 @@ D:\APIS-CSharp\ConsolaBD\Consola\obj\Debug\net8.0\ref\Consola.dll
 D:\APIS-CSharp\ConsolaBD\Consola\obj\Debug\net8.0\Consola.sourcelink.json
 D:\APIS-CSharp\ConsolaBD\Consola\bin\Debug\net8.0\Data.dll
 D:\APIS-CSharp\ConsolaBD\Consola\bin\Debug\net8.0\Data.pdb
+D:\APIS-CSharp\ConsolaBD\Consola\bin\Debug\net8.0\.Env

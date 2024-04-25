@@ -1,29 +1,32 @@
-﻿using Data;
+﻿using Consola;
+using Data;
 using System.Data;
 
-string path = @"D:\APIS-CSharp\archivosNuevos\separado.csv";
-var directory = Path.GetDirectoryName(path);
-if (!Directory.Exists(directory))
-{
-    Directory.CreateDirectory(directory);
-}
+string archivoConfiguracion = Path.Combine(Environment.CurrentDirectory, ".Env");
+var configuracion = new Configuracion();
+var conf = configuracion.ObtenerConfiguracion(archivoConfiguracion);
 
-var conexion = new Conexion();
+string rutaArchivo = @"D:\APIS-CSharp\archivosNuevos\separado.csv";
+
+var conexion = new Conexion(conf["Servidor"], conf["BaseDatos"], conf["Usuario"], conf["Password"]);
 var manejadorArchivos = new ManejadorArchivo();
+
 var usuarios = conexion.ObtenerUsuariosSinSincronizar();
 
 foreach (DataRow usuario in usuarios.Tables[0].Rows)
 {
-    //Console.WriteLine($"Id {usuario[0]}, Nombre {usuario[1]}");
-    //Console.WriteLine($"Id {usuario["id"]}, Nombre {usuario["nombre"]}");
-    var cadena = $"{usuario["id"]}, {usuario["nombre"]},{usuario["apellido"]},{usuario["email"]},{usuario["genero"]},{usuario["usuario"]},{usuario["activo"]}";
-    //Console.WriteLine(cadena);
-
-    using (StreamWriter writer = new StreamWriter(path, true))
+    try
     {
-        writer.WriteLine(cadena);
+        if (manejadorArchivos.GuardarEnCSV(usuario, rutaArchivo))
+        {
+            conexion.ActualizarSincronizado(int.Parse(usuario["id"].ToString()));
+        }
     }
-    conexion.ActualizarSincronizado(int.Parse(usuario["id"].ToString()));
-    //var ss = Convert.ToInt32(usuario["id"].ToString());
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+
+    
 }
 Console.WriteLine("Fin Lectura");
